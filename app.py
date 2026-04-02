@@ -4,19 +4,6 @@ import events as ev
 
 app = Flask(__name__)
 
-_devices = {}
-
-def set_devices(d):
-    global _devices
-    _devices = d
-
-@app.route("/devices")
-def devices():
-    return jsonify([
-        {"mac": mac, "name": info["name"], "device": info["device"], "ip": info["ip"]}
-        for mac, info in _devices.items()
-    ])
-
 @app.route("/")
 def index():
     return render_template("index.html")

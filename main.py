@@ -1,7 +1,7 @@
 from scapy.all import *
 from spoofer import *
 from sniffer import *
-from app import run as run_flask, set_devices
+from app import run as run_flask
 import threading
 import time
 
@@ -61,8 +61,6 @@ def main():
     my_mac = get_if_hwaddr(conf.iface)
     gateway_mac = get_mac(gateway_ip)
 
-    ip_to_mac = {info["ip"]: mac for mac, info in devices.items()}
-
     scan_thread = threading.Thread(target=get_all_network_devices, args=(my_mac, gateway_mac, ip_to_mac))
     scan_thread.daemon = True
     scan_thread.start()
@@ -72,7 +70,6 @@ def main():
     print(f"Gateway MAC: {gateway_mac}")
 
     try:
-        set_devices(devices)
         flask_thread = threading.Thread(target=run_flask)
         flask_thread.daemon = True
         flask_thread.start()
